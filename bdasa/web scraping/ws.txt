@@ -1,0 +1,33 @@
+import requests
+from bs4 import BeautifulSoup
+
+HEADERS = ({'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) \AppleWebKit/537.36 (KHTML, like Gecko) \Chrome/90.0.4430.212 Safari/537.36','Accept-Language': 'en-US, en;q=0.5'})
+
+# Scrape the data
+def getdata(site_url):
+  res = requests.get(site_url, headers=HEADERS)
+  return res.text
+
+def gethtml(site_url):
+# pass the url into getdata function
+  data = getdata(site_url)
+  soup = BeautifulSoup(data, 'html.parser')
+  return (soup)
+
+site_url="https://www.amazon.com/SAMSUNG-Factory-Unlocked-Android-Smartphone/dp/B0BLP45GY8/ref=sr_1_1_sspa?crid=XXFDDA85FBVG&keywords=samsung%2Bs23%2Bultra&qid=1683979424&sprefix=samsung%2Bs23%2Caps%2C466&sr=8-1-spons&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEyTFRETzRJMFcxMzFMJmVuY3J5cHRlZElkPUEwNDQ0OTU4NkdVNDEwWTNJVldOJmVuY3J5cHRlZEFkSWQ9QTA1NDMxMjczUjFNMzExRTA4MzA0JndpZGdldE5hbWU9c3BfYXRmJmFjdGlvbj1jbGlja1JlZGlyZWN0JmRvTm90TG9nQ2xpY2s9dHJ1ZQ&th=1"
+
+soup = gethtml(site_url)
+
+def getCustomerName(soup):
+ # find the Html tag with find() and convert into string
+ data_string = ""
+ customer_list = []
+
+ for item in soup.find_all("span", class_="a-profile-name"):
+   data_string = data_string + item.get_text()
+   customer_list.append(data_string)
+   data_string = ""
+ return customer_list
+
+customer_res = getCustomerName(soup)
+print(customer_res)
